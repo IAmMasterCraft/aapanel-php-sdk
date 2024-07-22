@@ -48,8 +48,8 @@ function getSiteId($siteName) {
 // get $siteId
 $siteId = getSiteId($webName);
 
-// $newUrl = "storedev.top";
-// $newDomain = $domain->addDomain($siteId, ['webname' => $webName, 'domain' => $newUrl]);
+$newUrl = "redapplefarmers.com";
+$newDomain = $domain->addDomain($siteId, ['webname' => $webName, 'domain' => $newUrl]);
 $status = $ssl->disableSsl($webName);
 echo "Disabled Status Info: >>>>\n";
 print_r($status);
@@ -60,7 +60,11 @@ echo "All Domains list: >>>>\n";
 print_r($allDomains);
 echo "<<<<\n";
 
-$sslData = $ssl->applyForCertificate(['domains' => [$allDomains['domains']], 'siteId' => $siteId]);
+$allDomains = array_filter($allDomains['domains'], function($domain) {
+    return !preg_match('/^\*\./', $domain['name']) && $domain['name'] !== 'storedev.top';
+});
+
+$sslData = $ssl->applyForCertificate(['domains' => [$allDomains], 'siteId' => $siteId]);
 echo "SSL Data >>>>\n";
 print_r($sslData);
 echo "<<<<\n";
@@ -79,10 +83,4 @@ echo "<<<<\n";
 $system->getAutoRestartRph($webName);
 $system->autoRestartRph($webName);
 
-$data = $ssl->getSslData();
-$certList = $ssl->getSslCertificates();
-echo "Data & Certificate: >>>>\n";
-print_r($data);
-echo "\n";
-print_r($certList);
-echo "<<<<\n";
+echo "Success!!";

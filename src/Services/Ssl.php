@@ -32,7 +32,8 @@ class Ssl
         $result = array_map(function($domain) {
             return $domain['name'];
         }, $domainList);
-        return json_encode($result);
+        $reindexedResult = array_values($result);
+        return json_encode($reindexedResult);
     }
 
     public function applyForCertificate($data)
